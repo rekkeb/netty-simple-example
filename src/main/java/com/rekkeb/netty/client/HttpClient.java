@@ -1,6 +1,7 @@
 package com.rekkeb.netty.client;
 
 import com.rekkeb.netty.client.handlers.ByteBufHandler;
+import com.rekkeb.netty.client.handlers.HttpClientHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -8,6 +9,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.http.HttpClientCodec;
+import io.netty.handler.logging.LoggingHandler;
 
 /**
  *
@@ -20,20 +23,20 @@ public class HttpClient {
         try {
             Bootstrap b = new Bootstrap(); // (1)
             b.group(workerGroup) // (2)
-                    .channel(NioSocketChannel.class) // (3)
-                    //.option(ChannelOption.SO_KEEPALIVE, true) // (4)
-                    .remoteAddress("localhost", 8080)
-                    .handler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        public void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline()
-//                                .addLast(new HttpClientCodec())
-//                                    .addLast(new HttpClientHandler())
-                                .addLast(new ByteBufHandler())
-//                                    .addLast(new ObjectHandler())
-                            ;
-                        }
-                    });
+                .channel(NioSocketChannel.class) // (3)
+                //.option(ChannelOption.SO_KEEPALIVE, true) // (4)
+                .remoteAddress("localhost", 8080)
+                .handler(new ChannelInitializer<SocketChannel>() {
+                    @Override
+                    public void initChannel(SocketChannel ch) throws Exception {
+                        ch.pipeline()
+                                .addLast(new HttpClientCodec())
+                                .addLast(new HttpClientHandler())
+//                                    .addLast(new ByteBufHandler())
+//                                  .addLast(new ObjectHandler())
+                        ;
+                    }
+                });
 
             // Start the client.
             Channel channel = b.connect().sync().channel(); // (5)

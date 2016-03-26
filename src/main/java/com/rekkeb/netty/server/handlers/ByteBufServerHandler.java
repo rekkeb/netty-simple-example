@@ -8,12 +8,15 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.*;
 
 import java.nio.charset.Charset;
+import java.util.UUID;
 
 /**
  *
  * Created by rekkeb on 2/3/16.
  */
 public class ByteBufServerHandler extends ChannelInboundHandlerAdapter {
+
+    private String id = UUID.randomUUID().toString();
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
@@ -33,6 +36,7 @@ public class ByteBufServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println("channelRead: " + byteBuf.toString(Charset.forName("UTF-8")));
 
         byteBuf.writeBytes(" - Server".getBytes());
+        byteBuf.writeBytes((" - Id: "+this.id).getBytes());
 
         ctx.write(byteBuf)
                 .addListener(future -> {
@@ -48,6 +52,7 @@ public class ByteBufServerHandler extends ChannelInboundHandlerAdapter {
                 .addListener(ChannelFutureListener.CLOSE);
 
         System.out.println("Read Complete: " + ctx.name());
+
     }
 
     @Override
