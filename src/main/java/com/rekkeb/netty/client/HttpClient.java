@@ -30,10 +30,10 @@ public class HttpClient {
                     @Override
                     public void initChannel(SocketChannel ch) throws Exception {
                         ch.pipeline()
-                                .addLast(new HttpClientCodec())
-                                .addLast(new HttpClientHandler())
-//                                    .addLast(new ByteBufHandler())
-//                                  .addLast(new ObjectHandler())
+//                                .addLast(new HttpClientCodec())
+//                                .addLast(new HttpClientHandler())
+                                .addLast(new ByteBufHandler())
+//                                 .addLast(new ObjectHandler())
                         ;
                     }
                 });
