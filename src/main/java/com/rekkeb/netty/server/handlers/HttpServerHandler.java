@@ -1,13 +1,10 @@
 package com.rekkeb.netty.server.handlers;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
-import io.netty.util.CharsetUtil;
 
 /**
  *
@@ -34,11 +31,13 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             System.out.println(in.toString());
             System.out.println("-------------------------------");
 
-            HttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
-                    HttpResponseStatus.ACCEPTED,
-                    Unpooled.buffer().setBytes(0, "Reponserrrrllll".getBytes()),
+            FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
+                    HttpResponseStatus.OK,
+                    Unpooled.wrappedBuffer("Responserrrrrl".getBytes()),
                     false
             );
+            response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/plain");
+            response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
 
             ctx.write(response)
                     .addListener(future -> {
