@@ -16,11 +16,11 @@ import java.nio.charset.Charset;
  */
 public class HttpClientHandler extends SimpleChannelInboundHandler<HttpObject> {
 
-    ByteBuf content = Unpooled.buffer();
+    private ByteBuf content = Unpooled.buffer();
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        HttpRequest request = new DefaultHttpRequest(HttpVersion.HTTP_1_1,
+        HttpRequest request = new DefaultFullHttpRequest(HttpVersion.HTTP_1_1,
                 HttpMethod.GET,
                 "/");
 
